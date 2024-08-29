@@ -28,7 +28,7 @@ function my_sum_iter(n, sum) {
 
 my_sum_iter(2,0);
 
-//3 // recursive, time = theta(n), space = theta(1)
+//3 // iterative, time = theta(n), space = theta(1)
 
 //4
 function sum(term, a, next, b) {
