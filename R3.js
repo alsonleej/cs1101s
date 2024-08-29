@@ -43,13 +43,13 @@ function my_sum(n) {
 my_sum(2);
 
 //5
-function sum(term, a, next, b, total) {
+function sum_iter(term, a, next, b, total) {
     return (a > b) ? total
-                   : sum(term, next(a), next, b, total + term(a));
+                   : sum_iter(term, next(a), next, b, total + term(a));
 }
 
 function my_sum(n) { 
-    return sum((x => (x + 1)*x), 1, (x => x + 1), n, 0); 
+    return sum_iter((x => (x + 1)*x), 1, (x => x + 1), n, 0); 
 }
 
 my_sum(2);
