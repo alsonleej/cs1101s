@@ -31,3 +31,12 @@ const lst4 = list(7, list(list(6, 5), list(4), 3, 2), list(list(1)));
 
 head(head(head(tail(tail(lst4)))));
 
+function b(seq) {
+    return lst => seq === 0
+            ? lst
+            : seq % 10 === 1 //head is 1
+            ? b(math_floor(seq / 10))(head(lst))
+            : b(math_floor(seq / 10))(tail(lst)); //tail is 2
+}
+
+b(112121222)(lst3);
