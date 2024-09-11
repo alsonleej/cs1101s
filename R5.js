@@ -29,3 +29,17 @@ tree_sum(my_tree);
 // Returns 28
 
 //3
+function accumulate_tree(f, op, initial, tree) {
+    return accumulate( is_null(tree) 
+                    ? initial
+                    : is_number(tree)
+                    ? f(tree)
+                    : (x, y) => op(accumulate_tree(f, op, initial, x), y), 
+                        initial, tree);
+}
+
+function tree_sum2(tree) {
+    return accumulate_tree(x => x, (x, y) => x + y, 0 , tree);
+}
+
+tree_sum2(my_tree);
