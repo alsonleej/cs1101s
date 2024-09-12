@@ -16,7 +16,7 @@ function flatten_list(lst) {
         ? list(lst)
         : accumulate((x, y) => append(flatten_list(x), y), null, lst);
 }
-//This is a much better solution!!
+//since qn already specifies it is list of lists, no need to check is_number and no need to flatten_list(x)
 function flatten_list(lst) {
     return accumulate(append, null, lst);
 }
