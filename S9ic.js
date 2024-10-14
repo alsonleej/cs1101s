@@ -46,16 +46,17 @@ draw_data(lsti);
 function countpairs(x){
     let pairs_seen = null;
     function check(x){
-        if (is_null(x)){
-            return 1;
+        if (!is_pair(x)){
+            return undefined;
         }
-        else if (is_null(member(head(x)), pairs_seen)){
-            pairs_seen = append(list(head(x)), pairs_seen);
-        } else {
+        else if (is_null(member(x, pairs_seen))){ 
+            pairs_seen = pair(x, pairs_seen);
             check(head(x));
             check(tail(x));
         }
     }
+    check(x);
+    
     return length(pairs_seen);
 }
 
