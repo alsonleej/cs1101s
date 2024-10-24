@@ -1,4 +1,5 @@
 //R10
+///C:/Users/alson/Downloads/reflection-R10.pdf
 
 function stream_tail(xs) {
     return tail(xs)();
@@ -85,26 +86,22 @@ stream_ref(y, 2); //only display 2
 
 //2
 function zip_list_of_streams(ss){
-        // YOUR SOLUTION HERE
+        // soln from slides
     if (ss === null){
         return null;
     } else {
-        let str = zip_list_of_streams(map(stream_tail,ss));
-        for (let i = length(ss); i > 0; i = i - 1){
-            str = pair(list_ref(ss, i), ()=> str);
-        }
-        return str;
+        return pair(head(head(ss)), ()=>
+                zip_list_of_streams(append(tail(ss), list(stream_tail(head(ss))))));
     }
-    
 }
-
 eval_stream(zip_list_of_streams(list(integers,integers,integers)),10);
+
 //3
-// function partial_sums(s) {
+function partial_sums(s) {
 
-//     // YOUR SOLUTION HERE
-//     return pair(head(s), ()=>
-//         add_streams(stream_tail(s), partial_sums(s)));
+    // YOUR SOLUTION HERE
+    return pair(head(s), ()=>
+        add_streams(stream_tail(s), partial_sums(s)));
 
-// }
-// eval_stream(partial_sums(integers),10);
+}
+eval_stream(partial_sums(integers),10);
