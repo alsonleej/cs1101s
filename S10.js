@@ -1,4 +1,5 @@
 //S10
+//"C:\Users\alson\Downloads\studio-S10.pdf"
 function linear_search(A, v) {
     const len = array_length(A);
     let i = 0;
