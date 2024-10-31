@@ -35,6 +35,13 @@ function fun_to_series(fun) {
 return stream_map(fun, non_neg_integers);
 }
 //////////////////////////////
+const A = pair(1, () => scale_stream(2, A));
+const B = pair(1, () => mul_streams(B, integers));
+// A is the infinite stream containing the powers of two which means it
+// contains the numbers: 1, 2, 4, 8, . . .
+// B is the stream of factorials: 0!, 1!, 2!, 3!, 4!, etc, which means it contains the
+// numbers: 1, 1,
+// 2, 6, 24, 120, . . .
 //alt_ones: the stream 1, −1, 1, −1, . . . in as many ways as you can think of.
 const ao = pair(1, 
             ()=>pair(-1,
@@ -71,7 +78,16 @@ eval_stream(ics1,10);
 
 const integers  = integers_from(1);
 //const ics2 = stream_pairs(integers);
-
+// (b) Give the clearest explanation that you can of how stream_pairs works.
+// Answer:
+// stream_pairs produces a stream containing all pairs (p1, p2) where p1 occurs before
+// p2 in the given finite stream. stream_pairs works by “wishful thinking”: We assume
+// that stream_pairs produces the stream of pairs from the tail of the given stream.
+// What is missing are those pairs that start with the first element p1 of the given stream.
+// Therefore stream_pairs returns the result of appending the stream of those pairs to
+// the stream of pairs from the tail. The first stream is the result of a call of stream_map
+// to the tail, where each element p2 of the tail becomes the pair containing p1 and the
+// respective p2.
 //c) error, cos stream_append tries to evaluate stream_pairs(stream_tail(s)), leading to infitinie execution
 
 function stream_append_pickle(xs, ys) {
