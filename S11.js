@@ -51,5 +51,5 @@ eval_stream(z3,10);
 //S1 = 1 + x + x2 + x3 + ⋯
 //S2 = 1 + 2x + 3x2 + 4x3 + ⋯
 const s1 = pair(1, ()=>s1);
-const s2 = add_series(s1, stream_tail(s1));
+const s2 = pair(head(s1), ()=>add_series(s2, stream_tail(s1)));
 eval_stream(s2,10);
