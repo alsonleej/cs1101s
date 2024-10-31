@@ -53,3 +53,45 @@ eval_stream(z3,10);
 const s1 = pair(1, ()=>s1);
 const s2 = pair(head(s1), ()=>add_series(s2, stream_tail(s1)));
 eval_stream(s2,10);
+
+///ic
+function stream_pairs(s) {
+return is_null(s)
+? null
+: stream_append(
+stream_map(
+sn => pair(head(s), sn),
+stream_tail(s)),
+stream_pairs(stream_tail(s)));
+}
+
+const ints = list_to_stream(list(1,2,3,4,5));
+const ics1 = stream_pairs(ints);
+eval_stream(ics1,10);
+
+const integers  = integers_from(1);
+//const ics2 = stream_pairs(integers);
+
+//c) error, cos stream_append tries to evaluate stream_pairs(stream_tail(s)), leading to infitinie execution
+
+function stream_append_pickle(xs, ys) {
+return is_null(xs)
+? ys()
+: pair(head(xs),
+() => stream_append_pickle(stream_tail(xs),
+ys));
+}
+function stream_pairs2(s) {
+return is_null(s)
+? null
+: stream_append_pickle(
+stream_map(
+sn => pair(head(s), sn),
+stream_tail(s)),
+() => stream_pairs2(stream_tail(s)));
+}
+const ics3 = stream_pairs2(integers);
+
+//d) using () => stream_pairs2(stream_tail(s)) lets the eval be lazy, avoiding infinite execution
+eval_stream(ics3,10);
+//[ [1, 2],[ [1, 3],[ [1, 4],[[1, 5], [[1, 6], [[1, 7],....
