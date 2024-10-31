@@ -1,4 +1,6 @@
 //S11
+//file:///C:/Users/alson/Downloads/Studio%20S11%20Slides.pptx.pdf
+//file:///C:/Users/alson/Downloads/studio-S11-in-class.solution.pdf
 function add_streams(s1, s2) {
 return is_null(s1)
 ? s2
