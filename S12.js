@@ -1149,19 +1149,19 @@ function parse_and_evaluate(string) {
 
 //parse_and_evaluate("1; 2; 3;");
 
-parse_and_evaluate(`
-{
-const x = f(8);
-function f(y) {
-return y + 34;
-}
-x;
-}
+// parse_and_evaluate(`
+// {
+// const x = f(8);
+// function f(y) {
+// return y + 34;
+// }
+// x;
+// }
 
-`);
+// `);
 
-//parse_and_evaluate("true ? 1 : 2;");
-
+//parse_and_evaluate("false ? abracadabra(simsalabim) : 42;");
+parse_and_evaluate("a;");
 //parse_and_evaluate("math_PI;");
 
 //parse_and_evaluate("const x = 1 + 2; x;");
