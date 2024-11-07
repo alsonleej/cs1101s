@@ -510,7 +510,7 @@ function sequence_statements(stmt) { //QUESTION 1
         return append(seq, res);
     }
     seq = hoist(seq);
-   display(seq, "gedage");
+
    return seq;
 }
 function make_sequence(stmts) {   
@@ -1129,11 +1129,123 @@ function display_environment(E) {
     display("", "                                             ");
 }
 
-function parse_and_evaluate(string) {
-    return evaluate(parse(string));
+// CHANGED HERE QUESTION 2
+// Follow the structure of the
+// program to catch everything.
+// No need to return any value; 
+// just raise error whenever an
+// undeclared name occurs
+function check_names(component, env) {
+    is_literal(component)
+    ? "ok"
+    : is_name(component)
+    ? lookup_symbol_value(symbol_of_name(component), env)
+    : is_application(component)
+    ? check_names(
+          make_sequence(
+              pair(function_expression(component), 
+                   arg_expressions(component))),
+          env)
+    : is_binary_operator_combination(component)
+    ? check_names(make_sequence(
+                    list(first_operand(component),
+                         second_operand(component))), env)
+    : is_unary_operator_combination(component)
+    ? check_names(first_operand(component), env)
+    : is_conditional(component)
+    ? check_names(
+          make_sequence(
+              list(conditional_predicate(component),
+                   conditional_consequent(component),
+                   conditional_alternative(component))),
+          env)
+    : is_lambda_expression(component)
+    ? check_names(lambda_body(component), 
+                  extend_environment(
+                      lambda_parameter_symbols(component),
+                      list_of_unassigned(
+                         lambda_parameter_symbols(component)),
+                      env))
+    : is_sequence(component)
+    ? map(stmt => check_names(stmt, env),
+          sequence_statements(component))
+    : is_block(component)
+    ? check_names(block_body(component), 
+                  extend_environment(
+                      scan_out_declarations(block_body(component)),
+                      list_of_unassigned(
+                          scan_out_declarations(block_body(component))),
+                      env))
+    : is_function_declaration(component)	    
+    ? check_names(function_decl_to_constant_decl(component), env)
+    : is_return_statement(component)	    
+    ? check_names(return_expression(component), env)    
+    : is_declaration(component)
+    ? check_names(make_sequence(
+                      list(make_name(declaration_symbol(component)), 
+                           declaration_value_expression(component))),
+                  env)
+    : is_assignment(component)
+    ? check_names(make_sequence(
+                     list(make_name(assignment_symbol(component)),
+                          assignment_value_expression(component))),
+                  env)
+    : is_while_loop(component)
+    ? check_names(make_sequence(
+                    list(while_loop_predicate(component),
+                         while_loop_body(component))), env)
+    : is_for_loop(component)
+    ? check_names(make_block(
+                    make_sequence(
+                        list(for_loop_init,
+                        for_loop_predicate,
+                        for_loop_update,
+                        for_loop_body
+                        )
+                    )
+                  ), env)
+    : is_array_expression(component)
+    ? check_names(make_sequence(
+                    array_elements(component)), env)
+    : is_array_access(component)
+    ? check_names(make_sequence(
+                    list(
+                    array_access_array_expression(component),
+                    array_access_index_expression(component))),
+                    env)
+    : is_array_assignment(component)
+    ? check_names(make_sequence(
+                    list(
+                        array_assignment_access(component),
+                        array_assignment_value_expression(component)
+                        )), env)
+    : error(component, "Unknown syntax -- check_names");
 }
 
-//parse_and_evaluate("1;");
+function parse_and_check_names_and_evaluate(input) {
+    const program = parse(input);
+    const implicit_top_level_block = make_block(program);
+    check_names(implicit_top_level_block, the_global_environment);
+    return evaluate(implicit_top_level_block);
+}
+
+function parse_and_evaluate(string) {
+    return evaluate(make_block(parse(string)));
+}
+//QN1 CHECK
+// parse_and_evaluate(`
+// {
+// const x = f(8);
+// function f(y) {
+// return y + 34;
+// }
+// x;
+// }
+
+//QN2 CHECK
+//parse_and_check_names_and_evaluate("false ? abracadabra(simsalabim) : 42;");
+
+
 
 //parse_and_evaluate("undefined;");
 
@@ -1149,19 +1261,12 @@ function parse_and_evaluate(string) {
 
 //parse_and_evaluate("1; 2; 3;");
 
-// parse_and_evaluate(`
-// {
-// const x = f(8);
-// function f(y) {
-// return y + 34;
-// }
-// x;
-// }
+
 
 // `);
 
 //parse_and_evaluate("false ? abracadabra(simsalabim) : 42;");
-parse_and_evaluate("a;");
+
 //parse_and_evaluate("math_PI;");
 
 //parse_and_evaluate("const x = 1 + 2; x;");
