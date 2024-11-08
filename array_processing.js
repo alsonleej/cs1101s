@@ -66,7 +66,7 @@ function evalops(a, b, op) {
         : op === "%"
         ? a % b 
         : op === "**"
-        ? a ** b 
+        ? math_pow(a,b) 
         : op === "&&"
         ? a && b 
         : op === "||"
