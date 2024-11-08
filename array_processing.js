@@ -53,3 +53,35 @@ function array_pop(arr){
     const k = array_length(arr);
     return array_slice(arr, 0, k - 1);
 }
+
+function evalops(a, b, op) {
+    return op === "+"
+        ? a + b
+        : op === "-"
+        ? a - b
+        : op === "*"
+        ? a * b
+        : op === "/"
+        ? a / b
+        : op === "%"
+        ? a % b 
+        : op === "**"
+        ? a ** b 
+        : op === "&&"
+        ? a && b 
+        : op === "||"
+        ? a || b 
+        : op === "==="
+        ? a === b 
+        : op === "!="
+        ? a !== b 
+        : op === "<"
+        ? a < b 
+        : op === "<="
+        ? a <= b
+        : op === ">"
+        ? a > b 
+        : op === ">="
+        ? a >= b 
+        : null; 
+}
